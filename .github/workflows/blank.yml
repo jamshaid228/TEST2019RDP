@@ -1,6 +1,11 @@
 name: CI
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
@@ -18,9 +23,9 @@ jobs:
         copy nssm.exe C:\Windows\System32
         copy ngrok.exe C:\Windows\System32
     - name: Connect your NGROK account
+      run: .\ngrok.exe authtoken $NGROK_AUTH_TOKEN
       env:
         NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
-      run: .\ngrok.exe authtoken ${{ env:NGROK_AUTH_TOKEN }}
     - name: Download Important Files.
       run: |
         Invoke-WebRequest https://raw.githubusercontent.com/wiragunajaya/windowRDP/main/NGROK-US.bat -OutFile NGROK-US.bat
